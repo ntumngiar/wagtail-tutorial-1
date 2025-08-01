@@ -1,17 +1,55 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags static %}
 
 {% block body_class %}template-blogpage{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+{% endblock %}
+
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <p class="meta">{{ page.date }}</p>
+    <article class="blog-post">
+        <header class="blog-post-header">
+            <h1>{{ page.title }}</h1>
+            <p class="blog-post-date">{{ page.date }}</p>
+            
+            {% if page.categories.all %}
+                <div class="blog-post-categories">
+                    Categories: 
+                    {% for category in page.categories.all %}
+                        <span class="category-tag">{{ category.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {% if page.tags.all %}
+                <div class="blog-post-tags">
+                    Tags:
+                    {% for tag in page.tags.all %}
+                        <span class="tag">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </header>
 
-    <div class="intro">{{ page.intro }}</div>
+        {% if page.main_image %}
+            <div class="blog-post-hero-image">
+                {% image page.main_image width-800 %}
+            </div>
+        {% endif %}
 
-    {{ page.body|richtext }}
+        <div class="blog-post-intro">
+            <p><strong>{{ page.intro }}</strong></p>
+        </div>
 
-    <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+        <div class="blog-post-content">
+            {{ page.body|richtext }}
+        </div>
+
+        <footer class="blog-post-footer">
+            <p><a href="{{ page.get_parent.url }}">&larr; Return to blog</a></p>
+        </footer>
+    </article>
 
 {% endblock %}
