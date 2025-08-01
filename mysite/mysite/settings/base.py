@@ -24,11 +24,13 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "base",  # <- Our new base app
     "blog",  # <- Our new blog app.
     "home",
     "search",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.settings",  # <- Add this for site-wide settings
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -75,6 +77,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+
+                # Add this to register the settings context processor:
+                "wagtail.contrib.settings.context_processors.settings",
             ],
         },
     },
